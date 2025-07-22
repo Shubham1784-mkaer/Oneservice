@@ -47,17 +47,15 @@
     }
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 30px;
       justify-items: center;
     }
     .service-box {
       background: white;
       border-radius: 10px;
-      width: 100%;
-      max-width: 320px;
-      height: auto;
-      aspect-ratio: 4 / 3;
+      width: 220px;
+      height: 220px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
@@ -122,7 +120,7 @@
       padding: 10px 20px;
     }
     .footer-logo {
-      height: 120px;
+      height: 90px;
     }
     .footer-links, .footer-socials {
       display: flex;
@@ -136,10 +134,13 @@
     .footer-socials a {
       display: inline-block;
     }
-    .footer-socials img {
-      width: 30px;
-      height: 30px;
-      object-fit: contain;
+    .footer-socials i {
+      font-size: 22px;
+      color: #f4f4f4;
+      transition: color 0.3s;
+    }
+    .footer-socials i:hover {
+      color: orange;
     }
     .get-in-touch {
       background-color: orange;
@@ -155,6 +156,7 @@
       color: white;
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <div class="header">
@@ -216,9 +218,9 @@
         <a href="#privacy">Privacy Policy</a>
       </div>
       <div class="footer-socials">
-        <a href="#"><img src="Twitter.png" alt="Twitter"></a>
-        <a href="#"><img src="Instagram.png" alt="Instagram"></a>
-        <a href="#"><img src="Facebook.png" alt="Facebook"></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
       </div>
       <a href="#contact" class="get-in-touch">Get in Touch</a>
     </div>
@@ -228,8 +230,3 @@
   </div>
 </body>
 </html>
-
-
-
-
-        
