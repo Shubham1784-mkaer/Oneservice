@@ -82,6 +82,40 @@
       text-align: center;
       font-size: 15px;
     }
+    .sub-service-section {
+      padding: 20px 30px;
+      text-align: left;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+    .sub-service-section h2 {
+      color: #000;
+      margin-bottom: 25px;
+      font-weight: normal;
+      font-size: 24px;
+    }
+    .sub-service-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .sub-service-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    .sub-service-item p {
+      margin: 0 0 5px;
+    }
+    .sub-service-item a {
+      color: orange;
+      text-decoration: underline;
+      font-size: 14px;
+    }
     .footer {
       background-color: #3B1E0A;
       border-top: 2px solid #ddd;
@@ -159,79 +193,120 @@
       <div class="service-box"><img src="furniture.png" alt="Furniture Repair"><span>Furniture Repair</span></div>
       <div class="service-box"><img src="door.png" alt="Wooden Door"><span>Wooden Door</span></div>
       <div class="service-box"><img src="window.png" alt="Window & Curtain"><span>Window & Curtain</span></div>
-</div>
-</div>
-
-<!-- Sub-services Section -->
-<div style="padding: 20px 30px; text-align: left; background-color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-  <h2 style="font-size: 20px; margin-bottom: 25px;">Cupboard & Drawer</h2>
-  <div style="margin-left: 10px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Cupboard hinge installation (upto 2)</p>
-        <p>₹160</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="hinge.png" alt="Cupboard Hinge" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Channel repair (one set)</p>
-        <p>₹158</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="channel.png" alt="Channel Repair" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Drawer channel replacement (one set)</p>
-        <p>₹239</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="drawer_channel.png" alt="Drawer Channel" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Cupboard handle installation/replacement</p>
-        <p>₹100</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="handle.png" alt="Cupboard Handle" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Cupboard lock installation</p>
-        <p>₹400</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="lock_installation.png" alt="Lock Installation" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div>
-        <p>Cupboard lock replacement</p>
-        <p>₹100</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="lock_replace.png" alt="Lock Replacement" style="width: 100px; height: 100px; object-fit: contain;">
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <p>Cupboard lock repair</p>
-        <p>₹169</p>
-        <a href="#" style="color: orange; text-decoration: underline;">View details</a>
-      </div>
-      <img src="lock_repair.png" alt="Lock Repair" style="width: 100px; height: 100px; object-fit: contain;">
     </div>
   </div>
-</div>
 
-<div class="footer">
+  <!-- Cupboard & Drawer -->
+  <div class="sub-service-section">
+    <h2>Cupboard & Drawer</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cupboard hinge installation (upto 2)</p>
+          <p>₹160</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="hinge.png" alt="Cupboard Hinge">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Channel repair (one set)</p>
+          <p>₹158</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="channel.png" alt="Channel Repair">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Drawer channel replacement (one set)</p>
+          <p>₹239</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="drawer_channel.png" alt="Drawer Channel">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cupboard handle installation/replacement</p>
+          <p>₹100</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="handle.png" alt="Cupboard Handle">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cupboard lock installation</p>
+          <p>₹400</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="lock_installation.png" alt="Lock Installation">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cupboard lock replacement</p>
+          <p>₹100</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="lock_replace.png" alt="Lock Replacement">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cupboard lock repair</p>
+          <p>₹169</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="lock_repair.png" alt="Lock Repair">
+      </div>
+    </div>
+  </div>
+
+  <!-- Kitchen Fittings -->
+  <div class="sub-service-section">
+    <h2>Kitchen Fittings</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Pull out drawer repair/replacement</p>
+          <p>₹84</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="pullout_drawer.png" alt="Pull Out Drawer">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cabinet hinges</p>
+          <p>₹59</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="cabinet_hinges.png" alt="Cabinet Hinges">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cabinet hydraulic repair</p>
+          <p>₹89</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="cabinet_hydraulic.png" alt="Hydraulic Repair">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Utensil rack installation</p>
+          <p>₹129</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="utensil_rack.png" alt="Utensil Rack">
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Shelf installation</p>
+          <p>₹79</p>
+          <a href="#">View details</a>
+        </div>
+        <img src="shelf_install.png" alt="Shelf Installation">
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
     <div class="footer-top">
       <img src="SERVICE FOR ALL_20250713_140610_0000.png" alt="Footer Logo" class="footer-logo">
       <div class="footer-links">
