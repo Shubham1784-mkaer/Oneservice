@@ -163,7 +163,57 @@
     .copyright {
       margin-top: 10px;
       font-size: 14px;
+      color: white;}
+ .add-btn, .counter {
+      background-color: #7b3fe4;
       color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 8px;
+      font-weight: bold;
+      box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .add-btn:hover, .counter:hover {
+      background-color: #5f2cc8;
+      transform: scale(1.05);
+    }
+    .sub-service-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      justify-content: space-between;
+    }
+    .sub-service-item img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 8px;
+    }
+    .sub-service-item div {
+      flex: 1;
+      text-align: left;
+    }
+    .sub-service-item a {
+      margin-right: 10px;
+    }
+    .img-button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .img-button-container .counter-box {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .counter-box span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
@@ -614,7 +664,14 @@
         <p>₹49</p>
         <a href="#">View details</a>
       </div>
-      <img src="consultation.png" alt="Carpenters Consultation">
+      <div class="img-button-container">
+        <img src="consultation.png" alt="Carpenters Consultation">
+        <div class="counter-box">
+          <button class="counter" onclick="decrement(this)">-</button>
+          <span>0</span>
+          <button class="counter" onclick="increment(this)">+</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -639,5 +696,17 @@
       Copyright @ One Service
     </div>
   </div>
+
+  <script>
+    function increment(btn) {
+      const span = btn.parentElement.querySelector('span');
+      span.textContent = parseInt(span.textContent) + 1;
+    }
+    function decrement(btn) {
+      const span = btn.parentElement.querySelector('span');
+      const value = parseInt(span.textContent);
+      if (value > 0) span.textContent = value - 1;
+    }
+  </script>
 </body>
 </html>
