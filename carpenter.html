@@ -24,7 +24,13 @@
     .nav-container {
       display: flex;
       align-items: center;
-      gap: 40px;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+    .logo-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 20px; /* Reduced gap to bring nav-links closer to logo */
     }
     .nav-links {
       display: flex;
@@ -215,6 +221,10 @@
       text-align: center;
       font-weight: bold;
       color: #333;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 2px; /* Slightly lower the number */
     }
     .modal {
       display: none;
@@ -294,19 +304,42 @@
       text-decoration: none;
       cursor: pointer;
     }
+    #modal-add-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #modal-counter-box {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #modal-counter-box span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 6px; /* Lower the number more */
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="nav-container">
-      <img src="SERVICE FOR ALL_20250713_140610_0000.png" alt="One Service Logo" class="logo">
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="#services">Services</a>
-        <a href="#blog">Blog</a>
-        <a href="#about">About Us</a>
-        <a href="#contact">Contact Us</a>
+      <div class="logo-nav-group">
+        <img src="SERVICE FOR ALL_20250713_140610_0000.png" alt="One Service Logo" class="logo">
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="#services">Services</a>
+          <a href="#blog">Blog</a>
+          <a href="#about">About Us</a>
+          <a href="#contact">Contact Us</a>
+        </div>
       </div>
+      <a href="javascript:void(0);" onclick="openCartModal()" class="get-in-touch">View Cart</a>
     </div>
   </div>
 
@@ -333,7 +366,7 @@
         <div>
           <p>Cupboard hinge installation (upto 2)</p>
           <p>₹160</p>
-          <a href="javascript:void(0);" onclick="openModal('Cupboard hinge installation (upto 2)', '₹160')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cupboard hinge installation (upto 2)', '₹160', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="hinge.png" alt="Cupboard Hinge">
@@ -348,7 +381,7 @@
         <div>
           <p>Channel repair (one set)</p>
           <p>₹158</p>
-          <a href="javascript:void(0);" onclick="openModal('Channel repair (one set)', '₹158')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Channel repair (one set)', '₹158', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="channel.png" alt="Channel Repair">
@@ -363,7 +396,7 @@
         <div>
           <p>Drawer channel replacement (one set)</p>
           <p>₹239</p>
-          <a href="javascript:void(0);" onclick="openModal('Drawer channel replacement (one set)', '₹239')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Drawer channel replacement (one set)', '₹239', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="drawer_channel.png" alt="Drawer Channel">
@@ -378,7 +411,7 @@
         <div>
           <p>Cupboard handle installation/replacement</p>
           <p>₹100</p>
-          <a href="javascript:void(0);" onclick="openModal('Cupboard handle installation/replacement', '₹100')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cupboard handle installation/replacement', '₹100', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="handle.png" alt="Cupboard Handle">
@@ -393,7 +426,7 @@
         <div>
           <p>Cupboard lock installation</p>
           <p>₹400</p>
-          <a href="javascript:void(0);" onclick="openModal('Cupboard lock installation', '₹400')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cupboard lock installation', '₹400', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="lock_installation.png" alt="Lock Installation">
@@ -408,7 +441,7 @@
         <div>
           <p>Cupboard lock replacement</p>
           <p>₹100</p>
-          <a href="javascript:void(0);" onclick="openModal('Cupboard lock replacement', '₹100')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cupboard lock replacement', '₹100', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="lock_replace.png" alt="Lock Replacement">
@@ -423,7 +456,7 @@
         <div>
           <p>Cupboard lock repair</p>
           <p>₹169</p>
-          <a href="javascript:void(0);" onclick="openModal('Cupboard lock repair', '₹169')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cupboard lock repair', '₹169', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="lock_repair.png" alt="Lock Repair">
@@ -445,7 +478,7 @@
         <div>
           <p>Pull out drawer repair/replacement</p>
           <p>₹84</p>
-          <a href="javascript:void(0);" onclick="openModal('Pull out drawer repair/replacement', '₹84')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Pull out drawer repair/replacement', '₹84', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="pullout_drawer.png" alt="Pull Out Drawer">
@@ -460,7 +493,7 @@
         <div>
           <p>Cabinet hinges</p>
           <p>₹59</p>
-          <a href="javascript:void(0);" onclick="openModal('Cabinet hinges', '₹59')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cabinet hinges', '₹59', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="cabinet_hinges.png" alt="Cabinet Hinges">
@@ -475,7 +508,7 @@
         <div>
           <p>Cabinet hydraulic repair</p>
           <p>₹89</p>
-          <a href="javascript:void(0);" onclick="openModal('Cabinet hydraulic repair', '₹89')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cabinet hydraulic repair', '₹89', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="cabinet_hydraulic.png" alt="Hydraulic Repair">
@@ -490,7 +523,7 @@
         <div>
           <p>Utensil rack installation</p>
           <p>₹129</p>
-          <a href="javascript:void(0);" onclick="openModal('Utensil rack installation', '₹129')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Utensil rack installation', '₹129', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="utensil_rack.png" alt="Utensil Rack">
@@ -505,7 +538,7 @@
         <div>
           <p>Shelf installation</p>
           <p>₹79</p>
-          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹79')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹79', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="shelf_install.png" alt="Shelf Installation">
@@ -527,7 +560,7 @@
         <div>
           <p>Decor installation</p>
           <p>₹47</p>
-          <a href="javascript:void(0);" onclick="openModal('Decor installation', '₹47')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Decor installation', '₹47', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="decor_installation.png" alt="Decor Installation">
@@ -542,7 +575,7 @@
         <div>
           <p>Mirror installation</p>
           <p>₹89</p>
-          <a href="javascript:void(0);" onclick="openModal('Mirror installation', '₹89')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Mirror installation', '₹89', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="mirror_installation.png" alt="Mirror Installation">
@@ -557,7 +590,7 @@
         <div>
           <p>Shelf installation</p>
           <p>₹97</p>
-          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹97')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹97', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="shelf_decor.png" alt="Shelf Installation">
@@ -572,7 +605,7 @@
         <div>
           <p>Wall cabinet assembly & installation</p>
           <p>₹139</p>
-          <a href="javascript:void(0);" onclick="openModal('Wall cabinet assembly & installation', '₹139')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Wall cabinet assembly & installation', '₹139', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wall_cabinet.png" alt="Wall Cabinet">
@@ -587,7 +620,7 @@
         <div>
           <p>Bathroom mirror cabinet installation</p>
           <p>₹489</p>
-          <a href="javascript:void(0);" onclick="openModal('Bathroom mirror cabinet installation', '₹489')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Bathroom mirror cabinet installation', '₹489', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="bathroom_mirror.png" alt="Bathroom Mirror Cabinet">
@@ -602,7 +635,7 @@
         <div>
           <p>Drill (per hole)</p>
           <p>₹28</p>
-          <a href="javascript:void(0);" onclick="openModal('Drill (per hole)', '₹28')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Drill (per hole)', '₹28', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="drill_hole.png" alt="Drill">
@@ -624,7 +657,7 @@
         <div>
           <p>Mirror installation</p>
           <p>₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Mirror installation', '₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Mirror installation', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="bath_mirror_install.png" alt="Mirror Installation">
@@ -639,7 +672,7 @@
         <div>
           <p>Soap holder installation</p>
           <p>₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Soap holder installation', '₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Soap holder installation', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="soap_holder.png" alt="Soap Holder Installation">
@@ -654,7 +687,7 @@
         <div>
           <p>Towel holder installation</p>
           <p>₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Towel holder installation', '₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Towel holder installation', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="towel_holder.png" alt="Towel Holder Installation">
@@ -669,7 +702,7 @@
         <div>
           <p>Shelf installation</p>
           <p>₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Shelf installation', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="bath_shelf.png" alt="Shelf Installation">
@@ -691,7 +724,7 @@
         <div>
           <p>Ceiling mounted hanger installation</p>
           <p>₹439</p>
-          <a href="javascript:void(0);" onclick="openModal('Ceiling mounted hanger installation', '₹439')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Ceiling mounted hanger installation', '₹439', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="ceiling_hanger.png" alt="Ceiling Mounted Hanger Installation">
@@ -706,7 +739,7 @@
         <div>
           <p>Wall hanger installation</p>
           <p>₹189</p>
-          <a href="javascript:void(0);" onclick="openModal('Wall hanger installation', '₹189')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Wall hanger installation', '₹189', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wall_hanger.png" alt="Wall Hanger Installation">
@@ -721,7 +754,7 @@
         <div>
           <p>Cloth drying rope installation</p>
           <p>₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Cloth drying rope installation', '₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Cloth drying rope installation', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="rope_installation.png" alt="Cloth Drying Rope Installation">
@@ -743,7 +776,7 @@
         <div>
           <p>Bed support repair</p>
           <p>₹139</p>
-          <a href="javascript:void(0);" onclick="openModal('Bed support repair', '₹139')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Bed support repair', '₹139', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="bed_support.png" alt="Bed Support Repair">
@@ -758,7 +791,7 @@
         <div>
           <p>Headboard repair</p>
           <p>₹116</p>
-          <a href="javascript:void(0);" onclick="openModal('Headboard repair', '₹116')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Headboard repair', '₹116', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="headboard.png" alt="Headboard Repair">
@@ -773,7 +806,7 @@
         <div>
           <p>Wooden chair repair</p>
           <p>₹49</p>
-          <a href="javascript:void(0);" onclick="openModal('Wooden chair repair', '₹49')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Wooden chair repair', '₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wooden_chair.png" alt="Wooden Chair Repair">
@@ -788,7 +821,7 @@
         <div>
           <p>Wooden table repair</p>
           <p>₹49</p>
-          <a href="javascript:void(0);" onclick="openModal('Wooden table repair', '₹49')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Wooden table repair', '₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wooden_table.png" alt="Wooden Table Repair">
@@ -803,7 +836,7 @@
         <div>
           <p>Wooden sofa repair</p>
           <p>₹49</p>
-          <a href="javascript:void(0);" onclick="openModal('Wooden sofa repair', '₹49')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Wooden sofa repair', '₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wooden_sofa.png" alt="Wooden Sofa Repair">
@@ -818,7 +851,7 @@
         <div>
           <p>Plastic buffer installation</p>
           <p>Starts at ₹49</p>
-          <a href="javascript:void(0);" onclick="openModal('Plastic buffer installation', 'Starts at ₹49')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Plastic buffer installation', 'Starts at ₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="plastic_buffer.png" alt="Plastic Buffer Installation">
@@ -833,7 +866,7 @@
         <div>
           <p>Table/chair wheel fitting</p>
           <p>₹119</p>
-          <a href="javascript:void(0);" onclick="openModal('Table/chair wheel fitting', '₹119')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Table/chair wheel fitting', '₹119', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="wheel_fitting.png" alt="Table Chair Wheel Fitting">
@@ -855,7 +888,7 @@
         <div>
           <p>Door repair</p>
           <p>Starts at ₹69</p>
-          <a href="javascript:void(0);" onclick="openModal('Door repair', 'Starts at ₹69')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Door repair', 'Starts at ₹69', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="door_repair.png" alt="Door Repair">
@@ -870,7 +903,7 @@
         <div>
           <p>Door accessories & mesh installation</p>
           <p>Starts at ₹59</p>
-          <a href="javascript:void(0);" onclick="openModal('Door accessories & mesh installation', 'Starts at ₹59')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Door accessories & mesh installation', 'Starts at ₹59', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="door_accessories.png" alt="Door Accessories & Mesh Installation">
@@ -885,7 +918,7 @@
         <div>
           <p>Door closer installation</p>
           <p>Starts at ₹69</p>
-          <a href="javascript:void(0);" onclick="openModal('Door closer installation', 'Starts at ₹69')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Door closer installation', 'Starts at ₹69', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="door_closer.png" alt="Door Closer Installation">
@@ -900,7 +933,7 @@
         <div>
           <p>Door installation</p>
           <p>Starts at ₹449</p>
-          <a href="javascript:void(0);" onclick="openModal('Door installation', 'Starts at ₹449')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Door installation', 'Starts at ₹449', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="door_installation.png" alt="Door Installation">
@@ -915,7 +948,7 @@
         <div>
           <p>Door lock repair & installation</p>
           <p>Starts at ₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Door lock repair & installation', 'Starts at ₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Door lock repair & installation', 'Starts at ₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="door_lock.png" alt="Door Lock Repair & Installation">
@@ -937,7 +970,7 @@
         <div>
           <p>Curtain rod installation (2 brackets)</p>
           <p>₹189</p>
-          <a href="javascript:void(0);" onclick="openModal('Curtain rod installation (2 brackets)', '₹189')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Curtain rod installation (2 brackets)', '₹189', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="curtain_rod.png" alt="Curtain Rod Installation">
@@ -952,7 +985,7 @@
         <div>
           <p>Window AC frame installation</p>
           <p>₹349</p>
-          <a href="javascript:void(0);" onclick="openModal('Window AC frame installation', '₹349')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Window AC frame installation', '₹349', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="ac_frame.png" alt="Window AC Frame Installation">
@@ -967,7 +1000,7 @@
         <div>
           <p>Mosquito net installation</p>
           <p>₹139</p>
-          <a href="javascript:void(0);" onclick="openModal('Mosquito net installation', '₹139')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Mosquito net installation', '₹139', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="mosquito_net.png" alt="Mosquito Net Installation">
@@ -982,7 +1015,7 @@
         <div>
           <p>Blinds fitting (upto 5 ft)</p>
           <p>Starts at ₹49</p>
-          <a href="javascript:void(0);" onclick="openModal('Blinds fitting (upto 5 ft)', 'Starts at ₹49')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Blinds fitting (upto 5 ft)', 'Starts at ₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="blinds_fitting.png" alt="Blinds Fitting">
@@ -997,7 +1030,7 @@
         <div>
           <p>Window accessories</p>
           <p>Starts at ₹79</p>
-          <a href="javascript:void(0);" onclick="openModal('Window accessories', 'Starts at ₹79')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Window accessories', 'Starts at ₹79', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="window_accessories.png" alt="Window Accessories">
@@ -1012,7 +1045,7 @@
         <div>
           <p>Window AC frame uninstallation</p>
           <p>Starts at ₹99</p>
-          <a href="javascript:void(0);" onclick="openModal('Window AC frame uninstallation', 'Starts at ₹99')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Window AC frame uninstallation', 'Starts at ₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="ac_uninstall.png" alt="Window AC Frame Uninstallation">
@@ -1027,7 +1060,7 @@
         <div>
           <p>Window misalignment/jam repair</p>
           <p>Starts at ₹139</p>
-          <a href="javascript:void(0);" onclick="openModal('Window misalignment/jam repair', 'Starts at ₹139')">View details</a>
+          <a href="javascript:void(0);" onclick="openModal('Window misalignment/jam repair', 'Starts at ₹139', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
         </div>
         <div class="img-button-container">
           <img src="window_repair.png" alt="Window Misalignment or Jam Repair">
@@ -1048,7 +1081,7 @@
       <div>
         <p>Carpenters consultation</p>
         <p>₹49</p>
-        <a href="javascript:void(0);" onclick="openModal('Carpenters consultation', '₹49')">View details</a>
+        <a href="javascript:void(0);" onclick="openModal('Carpenters consultation', '₹49', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
       </div>
       <div class="img-button-container">
         <img src="consultation.png" alt="Carpenters Consultation">
@@ -1067,10 +1100,13 @@
       <span class="close" onclick="closeModal()">&times;</span>
       <div class="modal-header">
         <p id="modal-title"></p>
-        <div class="modal-counter-box">
-          <button class="counter" onclick="modalDecrement()">-</button>
-          <span id="modal-counter">0</span>
-          <button class="counter" onclick="modalIncrement()">+</button>
+        <div id="modal-add-container">
+          <button id="modal-add-btn" class="add-btn">Add</button>
+          <div id="modal-counter-box" class="counter-box">
+            <button class="counter" onclick="modalDecrement()">-</button>
+            <span id="modal-counter">0</span>
+            <button class="counter" onclick="modalIncrement()">+</button>
+          </div>
         </div>
       </div>
       <p id="modal-price" class="price"></p>
@@ -1090,6 +1126,17 @@
         <li>The cost do not include spare parts.<p>The amount you pay at booking is a visitation fee which will be adjusted in your final replacement quote.</p></li>
         <li>One Service does not offer warranty on spare parts purchased from local market or provided by the customer.</li>
       </ol>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCartModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Your Cart</h2>
+      <div id="cart-items"></div>
+      <hr>
+      <p id="cart-total" style="text-align: right; font-weight: bold;">Total: ₹0.00</p>
     </div>
   </div>
 
@@ -1116,39 +1163,174 @@
   </div>
 
   <script>
+    let currentItemCounterSpan;
+    let currentBasePrice;
+    let cart = []; // Array to hold cart items
+
+    // Function to parse the price string and extract the numeric value
+    function parsePrice(priceStr) {
+      // Remove "Starts at " if present and ₹ symbol, then extract the number
+      const cleanedPrice = priceStr.replace(/Starts at /, '').replace(/₹/, '');
+      return parseFloat(cleanedPrice) || 0;
+    }
+
+    // Function to update the modal price based on quantity
+    function updateModalPrice(quantity) {
+      if (currentBasePrice !== undefined) {
+        const totalPrice = currentBasePrice * quantity;
+        document.getElementById('modal-price').textContent = `₹${totalPrice.toFixed(2)}`;
+      }
+    }
+
+    // Function to update the cart display in the modal
+    function updateCartModal() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.style.marginBottom = '10px';
+        itemElement.innerHTML = `
+          <p>${item.title} - Quantity: ${item.quantity} - Price: ₹${(item.basePrice * item.quantity).toFixed(2)}</p>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+        total += item.basePrice * item.quantity;
+      });
+      document.getElementById('cart-total').textContent = `Total: ₹${total.toFixed(2)}`;
+    }
+
+    // Function to add or update item in cart
+    function updateCart(title, basePrice, quantity) {
+      const existingItemIndex = cart.findIndex(item => item.title === title);
+      if (existingItemIndex > -1) {
+        if (quantity > 0) {
+          cart[existingItemIndex].quantity = quantity;
+        } else {
+          cart.splice(existingItemIndex, 1);
+        }
+      } else if (quantity > 0) {
+        cart.push({ title, basePrice, quantity });
+      }
+      updateCartModal();
+    }
+
     function increment(btn) {
       const span = btn.parentElement.querySelector('span');
-      span.textContent = parseInt(span.textContent) + 1;
+      const newValue = parseInt(span.textContent) + 1;
+      span.textContent = newValue;
+      // Update modal price if the modal is open for this item
+      if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
+        document.getElementById('modal-counter').textContent = newValue;
+        updateModalPrice(newValue);
+      }
+      // Update cart
+      const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
+      const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
+      const basePrice = parsePrice(priceStr);
+      updateCart(title, basePrice, newValue);
     }
+
     function decrement(btn) {
       const span = btn.parentElement.querySelector('span');
       const value = parseInt(span.textContent);
-      if (value > 0) span.textContent = value - 1;
+      if (value > 0) {
+        const newValue = value - 1;
+        span.textContent = newValue;
+        // Update modal price if the modal is open for this item
+        if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
+          document.getElementById('modal-counter').textContent = newValue;
+          updateModalPrice(newValue);
+          if (newValue <= 0) {
+            document.getElementById('modal-counter-box').style.display = 'none';
+            document.getElementById('modal-add-btn').style.display = 'block';
+          }
+        }
+        // Update cart
+        const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
+        const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
+        const basePrice = parsePrice(priceStr);
+        updateCart(title, basePrice, newValue);
+      }
     }
+
     function modalIncrement() {
       const span = document.getElementById('modal-counter');
-      span.textContent = parseInt(span.textContent) + 1;
+      const newValue = parseInt(span.textContent) + 1;
+      span.textContent = newValue;
+      currentItemCounterSpan.textContent = newValue;
+      updateModalPrice(newValue);
+      // Update cart
+      updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
     }
+
     function modalDecrement() {
       const span = document.getElementById('modal-counter');
-      const value = parseInt(span.textContent);
-      if (value > 0) span.textContent = value - 1;
+      let value = parseInt(span.textContent);
+      if (value > 0) {
+        const newValue = value - 1;
+        span.textContent = newValue;
+        currentItemCounterSpan.textContent = newValue;
+        updateModalPrice(newValue);
+        if (newValue <= 0) {
+          document.getElementById('modal-counter-box').style.display = 'none';
+          document.getElementById('modal-add-btn').style.display = 'block';
+        }
+        // Update cart
+        updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
+      }
     }
-    function openModal(title, price) {
+
+    function openModal(title, price, itemCounterSpan) {
       document.getElementById('modal-title').textContent = title;
-      document.getElementById('modal-price').textContent = price;
-      document.getElementById('modal-counter').textContent = '0';
+      currentBasePrice = parsePrice(price);
+      currentItemCounterSpan = itemCounterSpan;
+      const quantity = parseInt(itemCounterSpan.textContent);
+      document.getElementById('modal-counter').textContent = quantity;
+      updateModalPrice(quantity);
+      if (quantity > 0) {
+        document.getElementById('modal-add-btn').style.display = 'none';
+        document.getElementById('modal-counter-box').style.display = 'flex';
+      } else {
+        document.getElementById('modal-add-btn').style.display = 'block';
+        document.getElementById('modal-counter-box').style.display = 'none';
+      }
       document.getElementById('myModal').style.display = 'block';
     }
+
     function closeModal() {
       document.getElementById('myModal').style.display = 'none';
     }
+
+    function openCartModal() {
+      updateCartModal();
+      document.getElementById('cartModal').style.display = 'block';
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
+      const cartModal = document.getElementById('cartModal');
       if (event.target == modal) {
         modal.style.display = 'none';
+      } else if (event.target == cartModal) {
+        cartModal.style.display = 'none';
       }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('modal-add-btn').addEventListener('click', function() {
+        document.getElementById('modal-counter').textContent = 1;
+        this.style.display = 'none';
+        document.getElementById('modal-counter-box').style.display = 'flex';
+        currentItemCounterSpan.textContent = 1;
+        updateModalPrice(1);
+        // Update cart
+        updateCart(document.getElementById('modal-title').textContent, currentBasePrice, 1);
+      });
+    });
   </script>
 </body>
 </html>
