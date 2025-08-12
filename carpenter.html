@@ -337,7 +337,7 @@
       text-decoration: none;
       font-size: 14px;
     }
-    .login-modal-content {
+    .login-modal-content, .signup-modal-content {
       background-color: #fefefe;
       margin: 15% auto;
       padding: 20px;
@@ -347,23 +347,31 @@
       border-radius: 10px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
-    .login-form {
+    .login-form, .signup-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .login-form input {
+    .login-form input, .signup-form input {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .login-form button {
+    .login-form button, .signup-form button {
       background-color: orange;
       color: white;
       padding: 10px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+    }
+    .signup-link, .login-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .signup-link a, .login-link a {
+      color: orange;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -1194,6 +1202,28 @@
         <input type="password" placeholder="Password" required>
         <button type="submit">Login</button>
       </form>
+      <div class="signup-link">
+        <p>Not registered? <a href="javascript:void(0);" onclick="openSignupModal()">Sign Up</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div id="signupModal" class="modal">
+    <div class="signup-modal-content">
+      <span class="close" onclick="closeSignupModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Sign Up</h2>
+      <form class="signup-form">
+        <input type="text" placeholder="Username" required>
+        <input type="email" placeholder="Email" required>
+        <input type="tel" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+        <input type="password" placeholder="Password" required>
+        <input type="password" placeholder="Confirm Password" required>
+        <button type="submit">Sign Up</button>
+      </form>
+      <div class="login-link">
+        <p>Already have an account? <a href="javascript:void(0);" onclick="openLoginModal()">Login</a></p>
+      </div>
     </div>
   </div>
 
@@ -1223,6 +1253,8 @@
     let currentItemCounterSpan;
     let currentBasePrice;
     let cart = []; // Array to hold cart items
+    let otpEmail = '';
+    let otpPhone = '';
 
     // Function to parse the price string and extract the numeric value
     function parsePrice(priceStr) {
@@ -1389,16 +1421,28 @@
       document.getElementById('loginModal').style.display = 'none';
     }
 
+    function openSignupModal() {
+      closeLoginModal();
+      document.getElementById('signupModal').style.display = 'block';
+    }
+
+    function closeSignupModal() {
+      document.getElementById('signupModal').style.display = 'none';
+    }
+
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
       const cartModal = document.getElementById('cartModal');
       const loginModal = document.getElementById('loginModal');
+      const signupModal = document.getElementById('signupModal');
       if (event.target == modal) {
         modal.style.display = 'none';
       } else if (event.target == cartModal) {
         cartModal.style.display = 'none';
       } else if (event.target == loginModal) {
         loginModal.style.display = 'none';
+      } else if (event.target == signupModal) {
+        signupModal.style.display = 'none';
       }
     }
 
@@ -1413,7 +1457,7 @@
         updateCart(document.getElementById('modal-title').textContent, currentBasePrice, 1);
       });
 
-      // Prevent default form submission for login (since it's static)
+      // Prevent default form submission for login and sign up (since it's static)
       const loginForm = document.querySelector('.login-form');
       if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
@@ -1422,7 +1466,39 @@
           closeLoginModal();
         });
       }
+
+      const signupForm = document.querySelector('.signup-form');
+      if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          // Simulate OTP for email and phone
+          otpEmail = Math.floor(100000 + Math.random() * 900000).toString();
+          otpPhone = Math.floor(100000 + Math.random() * 900000).toString();
+          alert(`OTP for Email: ${otpEmail}\nOTP for Phone: ${otpPhone}`);
+          // Hide signup form and show OTP verification
+          signupForm.style.display = 'none';
+          const otpSection = document.createElement('div');
+          otpSection.innerHTML = `
+            <h3>Verify OTP</h3>
+            <input type="text" id="otpEmail" placeholder="Email OTP" required>
+            <input type="text" id="otpPhone" placeholder="Phone OTP" required>
+            <button type="button" onclick="verifyOTP()">Verify</button>
+          `;
+          document.getElementById('signupModal').querySelector('.signup-modal-content').appendChild(otpSection);
+        });
+      }
     });
+
+    function verifyOTP() {
+      const enteredOtpEmail = document.getElementById('otpEmail').value;
+      const enteredOtpPhone = document.getElementById('otpPhone').value;
+      if (enteredOtpEmail === otpEmail && enteredOtpPhone === otpPhone) {
+        alert('Signup successful!');
+        closeSignupModal();
+      } else {
+        alert('Invalid OTP. Please try again.');
+      }
+    }
   </script>
 </body>
 </html>
