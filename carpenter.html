@@ -337,7 +337,7 @@
       text-decoration: none;
       font-size: 14px;
     }
-    .login-modal-content, .otp-modal-content {
+    .login-modal-content, .otp-modal-content, .address-modal-content {
       background-color: #fefefe;
       margin: 15% auto;
       padding: 20px;
@@ -347,17 +347,17 @@
       border-radius: 10px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
-    .login-form, .otp-form {
+    .login-form, .otp-form, .address-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .login-form input, .otp-form input {
+    .login-form input, .otp-form input, .address-form input, .address-form textarea {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .login-form button, .otp-form button {
+    .login-form button, .otp-form button, .address-form button {
       background-color: orange;
       color: white;
       padding: 10px;
@@ -1216,6 +1216,20 @@
     </div>
   </div>
 
+  <!-- Address Input Modal -->
+  <div id="addressModal" class="modal">
+    <div class="address-modal-content">
+      <span class="close" onclick="closeAddressModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Enter Your Address</h2>
+      <form class="address-form" id="addressForm">
+        <input type="text" id="addressName" placeholder="Full Name" required>
+        <textarea id="addressDetails" placeholder="Address (Street, City, State, ZIP)" required rows="4"></textarea>
+        <button type="submit">Submit Address</button>
+      </form>
+      <p class="error-message" id="addressError"></p>
+    </div>
+  </div>
+
   <div class="footer">
     <div class="footer-top">
       <img src="SERVICE FOR ALL_20250713_140610_0000.png" alt="Footer Logo" class="footer-logo">
@@ -1413,11 +1427,23 @@
       document.getElementById('phoneOtpError').textContent = '';
     }
 
+    function openAddressModal() {
+      document.getElementById('addressModal').style.display = 'block';
+      document.getElementById('addressError').textContent = '';
+    }
+
+    function closeAddressModal() {
+      document.getElementById('addressModal').style.display = 'none';
+      document.getElementById('addressForm').reset();
+      document.getElementById('addressError').textContent = '';
+    }
+
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
       const cartModal = document.getElementById('cartModal');
       const loginModal = document.getElementById('loginModal');
       const phoneOtpModal = document.getElementById('phoneOtpModal');
+      const addressModal = document.getElementById('addressModal');
       if (event.target == modal) {
         modal.style.display = 'none';
       } else if (event.target == cartModal) {
@@ -1426,6 +1452,8 @@
         loginModal.style.display = 'none';
       } else if (event.target == phoneOtpModal) {
         phoneOtpModal.style.display = 'none';
+      } else if (event.target == addressModal) {
+        addressModal.style.display = 'none';
       }
     }
 
@@ -1465,11 +1493,32 @@
           const enteredOtpPhone = document.getElementById('phoneOtp').value;
 
           if (enteredOtpPhone === otpPhone) {
-            alert('Login successful! Welcome back.');
+            alert('Login successful! Please enter your address.');
             closePhoneOtpModal();
+            openAddressModal();
           } else {
             document.getElementById('phoneOtpError').textContent = 'Invalid Phone OTP. Please try again.';
           }
+        });
+      }
+
+      const addressForm = document.querySelector('#addressForm');
+      if (addressForm) {
+        addressForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const name = document.getElementById('addressName').value;
+          const addressDetails = document.getElementById('addressDetails').value;
+
+          if (!name || !addressDetails) {
+            document.getElementById('addressError').textContent = 'Please fill in all fields.';
+            return;
+          }
+
+          userData.name = name;
+          userData.address = addressDetails;
+          alert(`Address saved successfully! Name: ${name}, Address: ${addressDetails}`);
+          closeAddressModal();
+          // Optionally, proceed with order confirmation or redirect
         });
       }
     });
