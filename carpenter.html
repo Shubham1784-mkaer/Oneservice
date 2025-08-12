@@ -30,7 +30,7 @@
     .logo-nav-group {
       display: flex;
       align-items: center;
-      gap: 20px; /* Reduced gap to bring nav-links closer to logo */
+      gap: 20px;
     }
     .nav-links {
       display: flex;
@@ -224,7 +224,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding-bottom: 2px; /* Slightly lower the number */
+      padding-bottom: 2px;
     }
     .modal {
       display: none;
@@ -337,7 +337,7 @@
       text-decoration: none;
       font-size: 14px;
     }
-    .login-modal-content, .signup-modal-content {
+    .login-modal-content, .otp-modal-content {
       background-color: #fefefe;
       margin: 15% auto;
       padding: 20px;
@@ -347,17 +347,17 @@
       border-radius: 10px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
-    .login-form, .signup-form {
+    .login-form, .otp-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .login-form input, .signup-form input {
+    .login-form input, .otp-form input {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .login-form button, .signup-form button {
+    .login-form button, .otp-form button {
       background-color: orange;
       color: white;
       padding: 10px;
@@ -365,13 +365,11 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    .signup-link, .login-link {
+    .error-message {
+      color: red;
+      font-size: 14px;
       text-align: center;
       margin-top: 10px;
-    }
-    .signup-link a, .login-link a {
-      color: orange;
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -1197,33 +1195,24 @@
     <div class="login-modal-content">
       <span class="close" onclick="closeLoginModal()">&times;</span>
       <h2 style="text-align: center; font-weight: normal;">Login</h2>
-      <form class="login-form">
-        <input type="text" placeholder="Username" required>
-        <input type="password" placeholder="Password" required>
-        <button type="submit">Login</button>
+      <form class="login-form" id="loginForm">
+        <input type="tel" id="loginPhone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+        <button type="submit">Send OTP</button>
       </form>
-      <div class="signup-link">
-        <p>Not registered? <a href="javascript:void(0);" onclick="openSignupModal()">Sign Up</a></p>
-      </div>
+      <p class="error-message" id="loginError"></p>
     </div>
   </div>
 
-  <!-- Sign Up Modal -->
-  <div id="signupModal" class="modal">
-    <div class="signup-modal-content">
-      <span class="close" onclick="closeSignupModal()">&times;</span>
-      <h2 style="text-align: center; font-weight: normal;">Sign Up</h2>
-      <form class="signup-form">
-        <input type="text" placeholder="Username" required>
-        <input type="email" placeholder="Email" required>
-        <input type="tel" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
-        <input type="password" placeholder="Password" required>
-        <input type="password" placeholder="Confirm Password" required>
-        <button type="submit">Sign Up</button>
+  <!-- Phone OTP Verification Modal -->
+  <div id="phoneOtpModal" class="modal">
+    <div class="otp-modal-content">
+      <span class="close" onclick="closePhoneOtpModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Verify Phone OTP</h2>
+      <form class="otp-form" id="phoneOtpForm">
+        <input type="text" id="phoneOtp" placeholder="Phone OTP" required>
+        <button type="submit">Verify Phone</button>
       </form>
-      <div class="login-link">
-        <p>Already have an account? <a href="javascript:void(0);" onclick="openLoginModal()">Login</a></p>
-      </div>
+      <p class="error-message" id="phoneOtpError"></p>
     </div>
   </div>
 
@@ -1252,18 +1241,15 @@
   <script>
     let currentItemCounterSpan;
     let currentBasePrice;
-    let cart = []; // Array to hold cart items
-    let otpEmail = '';
+    let cart = [];
     let otpPhone = '';
+    let userData = {};
 
-    // Function to parse the price string and extract the numeric value
     function parsePrice(priceStr) {
-      // Remove "Starts at " if present and ₹ symbol, then extract the number
       const cleanedPrice = priceStr.replace(/Starts at /, '').replace(/₹/, '');
       return parseFloat(cleanedPrice) || 0;
     }
 
-    // Function to update the modal price based on quantity
     function updateModalPrice(quantity) {
       if (currentBasePrice !== undefined) {
         const totalPrice = currentBasePrice * quantity;
@@ -1271,7 +1257,6 @@
       }
     }
 
-    // Function to update the cart display in the modal
     function updateCartModal() {
       const cartItemsContainer = document.getElementById('cart-items');
       cartItemsContainer.innerHTML = '';
@@ -1302,7 +1287,6 @@
       document.getElementById('cart-total').textContent = `Total: ₹${total.toFixed(2)}`;
     }
 
-    // Function to add or update item in cart
     function updateCart(title, basePrice, quantity) {
       const existingItemIndex = cart.findIndex(item => item.title === title);
       if (existingItemIndex > -1) {
@@ -1321,12 +1305,10 @@
       const span = btn.parentElement.querySelector('span');
       const newValue = parseInt(span.textContent) + 1;
       span.textContent = newValue;
-      // Update modal price if the modal is open for this item
       if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
         document.getElementById('modal-counter').textContent = newValue;
         updateModalPrice(newValue);
       }
-      // Update cart
       const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
       const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
       const basePrice = parsePrice(priceStr);
@@ -1339,7 +1321,6 @@
       if (value > 0) {
         const newValue = value - 1;
         span.textContent = newValue;
-        // Update modal price if the modal is open for this item
         if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
           document.getElementById('modal-counter').textContent = newValue;
           updateModalPrice(newValue);
@@ -1348,7 +1329,6 @@
             document.getElementById('modal-add-btn').style.display = 'block';
           }
         }
-        // Update cart
         const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
         const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
         const basePrice = parsePrice(priceStr);
@@ -1362,7 +1342,6 @@
       span.textContent = newValue;
       currentItemCounterSpan.textContent = newValue;
       updateModalPrice(newValue);
-      // Update cart
       updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
     }
 
@@ -1378,7 +1357,6 @@
           document.getElementById('modal-counter-box').style.display = 'none';
           document.getElementById('modal-add-btn').style.display = 'block';
         }
-        // Update cart
         updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
       }
     }
@@ -1415,34 +1393,39 @@
 
     function openLoginModal() {
       document.getElementById('loginModal').style.display = 'block';
+      document.getElementById('loginError').textContent = '';
     }
 
     function closeLoginModal() {
       document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').textContent = '';
     }
 
-    function openSignupModal() {
-      closeLoginModal();
-      document.getElementById('signupModal').style.display = 'block';
+    function openPhoneOtpModal() {
+      document.getElementById('phoneOtpModal').style.display = 'block';
+      document.getElementById('phoneOtpError').textContent = '';
     }
 
-    function closeSignupModal() {
-      document.getElementById('signupModal').style.display = 'none';
+    function closePhoneOtpModal() {
+      document.getElementById('phoneOtpModal').style.display = 'none';
+      document.getElementById('phoneOtpForm').reset();
+      document.getElementById('phoneOtpError').textContent = '';
     }
 
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
       const cartModal = document.getElementById('cartModal');
       const loginModal = document.getElementById('loginModal');
-      const signupModal = document.getElementById('signupModal');
+      const phoneOtpModal = document.getElementById('phoneOtpModal');
       if (event.target == modal) {
         modal.style.display = 'none';
       } else if (event.target == cartModal) {
         cartModal.style.display = 'none';
       } else if (event.target == loginModal) {
         loginModal.style.display = 'none';
-      } else if (event.target == signupModal) {
-        signupModal.style.display = 'none';
+      } else if (event.target == phoneOtpModal) {
+        phoneOtpModal.style.display = 'none';
       }
     }
 
@@ -1453,52 +1436,43 @@
         document.getElementById('modal-counter-box').style.display = 'flex';
         currentItemCounterSpan.textContent = 1;
         updateModalPrice(1);
-        // Update cart
         updateCart(document.getElementById('modal-title').textContent, currentBasePrice, 1);
       });
 
-      // Prevent default form submission for login and sign up (since it's static)
-      const loginForm = document.querySelector('.login-form');
+      const loginForm = document.querySelector('#loginForm');
       if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          // Here you can add login logic if needed, for now just close the modal
+          const phone = document.getElementById('loginPhone').value;
+
+          if (!/^[0-9]{10}$/.test(phone)) {
+            document.getElementById('loginError').textContent = 'Please enter a valid 10-digit phone number.';
+            return;
+          }
+
+          userData.phone = phone;
+          otpPhone = Math.floor(100000 + Math.random() * 900000).toString();
+          alert(`SMS from One Service: Your OTP is ${otpPhone}. Please enter it to verify your phone number.`);
           closeLoginModal();
+          openPhoneOtpModal();
         });
       }
 
-      const signupForm = document.querySelector('.signup-form');
-      if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
+      const phoneOtpForm = document.querySelector('#phoneOtpForm');
+      if (phoneOtpForm) {
+        phoneOtpForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          // Simulate OTP for email and phone
-          otpEmail = Math.floor(100000 + Math.random() * 900000).toString();
-          otpPhone = Math.floor(100000 + Math.random() * 900000).toString();
-          alert(`OTP for Email: ${otpEmail}\nOTP for Phone: ${otpPhone}`);
-          // Hide signup form and show OTP verification
-          signupForm.style.display = 'none';
-          const otpSection = document.createElement('div');
-          otpSection.innerHTML = `
-            <h3>Verify OTP</h3>
-            <input type="text" id="otpEmail" placeholder="Email OTP" required>
-            <input type="text" id="otpPhone" placeholder="Phone OTP" required>
-            <button type="button" onclick="verifyOTP()">Verify</button>
-          `;
-          document.getElementById('signupModal').querySelector('.signup-modal-content').appendChild(otpSection);
+          const enteredOtpPhone = document.getElementById('phoneOtp').value;
+
+          if (enteredOtpPhone === otpPhone) {
+            alert('Login successful! Welcome back.');
+            closePhoneOtpModal();
+          } else {
+            document.getElementById('phoneOtpError').textContent = 'Invalid Phone OTP. Please try again.';
+          }
         });
       }
     });
-
-    function verifyOTP() {
-      const enteredOtpEmail = document.getElementById('otpEmail').value;
-      const enteredOtpPhone = document.getElementById('otpPhone').value;
-      if (enteredOtpEmail === otpEmail && enteredOtpPhone === otpPhone) {
-        alert('Signup successful!');
-        closeSignupModal();
-      } else {
-        alert('Invalid OTP. Please try again.');
-      }
-    }
   </script>
 </body>
 </html>
