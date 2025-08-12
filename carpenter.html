@@ -30,7 +30,7 @@
     .logo-nav-group {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 20px; /* Reduced gap to bring nav-links closer to logo */
     }
     .nav-links {
       display: flex;
@@ -224,7 +224,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding-bottom: 2px;
+      padding-bottom: 2px; /* Slightly lower the number */
     }
     .modal {
       display: none;
@@ -323,6 +323,47 @@
       align-items: center;
       justify-content: center;
       padding-bottom: 6px;
+    }
+    .total-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .login-btn {
+      background-color: orange;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .login-modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .login-form input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .login-form button {
+      background-color: orange;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -1136,7 +1177,23 @@
       <h2 style="text-align: center; font-weight: normal;">Your Cart</h2>
       <div id="cart-items"></div>
       <hr>
-      <p id="cart-total" style="text-align: left; font-weight: bold;">Total: ₹0.00</p>
+      <div class="total-section">
+        <p id="cart-total" style="font-weight: bold;">Total: ₹0.00</p>
+        <a href="javascript:void(0);" onclick="openLoginModal()" class="login-btn">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="login-modal-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Login</h2>
+      <form class="login-form">
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
     </div>
   </div>
 
@@ -1165,13 +1222,16 @@
   <script>
     let currentItemCounterSpan;
     let currentBasePrice;
-    let cart = [];
+    let cart = []; // Array to hold cart items
 
+    // Function to parse the price string and extract the numeric value
     function parsePrice(priceStr) {
+      // Remove "Starts at " if present and ₹ symbol, then extract the number
       const cleanedPrice = priceStr.replace(/Starts at /, '').replace(/₹/, '');
       return parseFloat(cleanedPrice) || 0;
     }
 
+    // Function to update the modal price based on quantity
     function updateModalPrice(quantity) {
       if (currentBasePrice !== undefined) {
         const totalPrice = currentBasePrice * quantity;
@@ -1179,6 +1239,7 @@
       }
     }
 
+    // Function to update the cart display in the modal
     function updateCartModal() {
       const cartItemsContainer = document.getElementById('cart-items');
       cartItemsContainer.innerHTML = '';
@@ -1209,6 +1270,7 @@
       document.getElementById('cart-total').textContent = `Total: ₹${total.toFixed(2)}`;
     }
 
+    // Function to add or update item in cart
     function updateCart(title, basePrice, quantity) {
       const existingItemIndex = cart.findIndex(item => item.title === title);
       if (existingItemIndex > -1) {
@@ -1227,10 +1289,12 @@
       const span = btn.parentElement.querySelector('span');
       const newValue = parseInt(span.textContent) + 1;
       span.textContent = newValue;
+      // Update modal price if the modal is open for this item
       if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
         document.getElementById('modal-counter').textContent = newValue;
         updateModalPrice(newValue);
       }
+      // Update cart
       const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
       const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
       const basePrice = parsePrice(priceStr);
@@ -1243,6 +1307,7 @@
       if (value > 0) {
         const newValue = value - 1;
         span.textContent = newValue;
+        // Update modal price if the modal is open for this item
         if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
           document.getElementById('modal-counter').textContent = newValue;
           updateModalPrice(newValue);
@@ -1251,6 +1316,7 @@
             document.getElementById('modal-add-btn').style.display = 'block';
           }
         }
+        // Update cart
         const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
         const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
         const basePrice = parsePrice(priceStr);
@@ -1264,6 +1330,7 @@
       span.textContent = newValue;
       currentItemCounterSpan.textContent = newValue;
       updateModalPrice(newValue);
+      // Update cart
       updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
     }
 
@@ -1279,6 +1346,7 @@
           document.getElementById('modal-counter-box').style.display = 'none';
           document.getElementById('modal-add-btn').style.display = 'block';
         }
+        // Update cart
         updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
       }
     }
@@ -1313,13 +1381,24 @@
       document.getElementById('cartModal').style.display = 'none';
     }
 
+    function openLoginModal() {
+      document.getElementById('loginModal').style.display = 'block';
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
       const cartModal = document.getElementById('cartModal');
+      const loginModal = document.getElementById('loginModal');
       if (event.target == modal) {
         modal.style.display = 'none';
       } else if (event.target == cartModal) {
         cartModal.style.display = 'none';
+      } else if (event.target == loginModal) {
+        loginModal.style.display = 'none';
       }
     }
 
@@ -1330,8 +1409,19 @@
         document.getElementById('modal-counter-box').style.display = 'flex';
         currentItemCounterSpan.textContent = 1;
         updateModalPrice(1);
+        // Update cart
         updateCart(document.getElementById('modal-title').textContent, currentBasePrice, 1);
       });
+
+      // Prevent default form submission for login (since it's static)
+      const loginForm = document.querySelector('.login-form');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          // Here you can add login logic if needed, for now just close the modal
+          closeLoginModal();
+        });
+      }
     });
   </script>
 </body>
