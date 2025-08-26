@@ -1,4 +1,43 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,6 +45,12 @@
   <title>Carpenter Services | One Service</title>
   <link rel="icon" href="SERVICE FOR ALL_20250713_140610_0000.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("mErvWsJi4SozuU5vO");
+    })();
+  </script>
   <style>
     body {
       margin: 0;
@@ -337,7 +382,7 @@
       text-decoration: none;
       font-size: 14px;
     }
-    .login-modal-content, .otp-modal-content, .address-modal-content {
+    .login-modal-content {
       background-color: #fefefe;
       margin: 15% auto;
       padding: 20px;
@@ -347,17 +392,17 @@
       border-radius: 10px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
-    .login-form, .otp-form, .address-form {
+    .login-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .login-form input, .otp-form input, .address-form input, .address-form textarea {
+    .login-form input, .login-form textarea {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .login-form button, .otp-form button, .address-form button {
+    .login-form button {
       background-color: orange;
       color: white;
       padding: 10px;
@@ -1190,43 +1235,18 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
+  <!-- Login and Address Modal -->
   <div id="loginModal" class="modal">
     <div class="login-modal-content">
       <span class="close" onclick="closeLoginModal()">&times;</span>
-      <h2 style="text-align: center; font-weight: normal;">Login</h2>
+      <h2 style="text-align: center; font-weight: normal;">Enter Your Details</h2>
       <form class="login-form" id="loginForm">
         <input type="tel" id="loginPhone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
-        <button type="submit">Send OTP</button>
+        <input type="text" id="loginName" placeholder="Full Name" required>
+        <textarea id="loginAddress" placeholder="Address (Street, City, State, ZIP)" required rows="4"></textarea>
+        <button type="submit">Submit Details</button>
       </form>
       <p class="error-message" id="loginError"></p>
-    </div>
-  </div>
-
-  <!-- Phone OTP Verification Modal -->
-  <div id="phoneOtpModal" class="modal">
-    <div class="otp-modal-content">
-      <span class="close" onclick="closePhoneOtpModal()">&times;</span>
-      <h2 style="text-align: center; font-weight: normal;">Verify Phone OTP</h2>
-      <form class="otp-form" id="phoneOtpForm">
-        <input type="text" id="phoneOtp" placeholder="Phone OTP" required>
-        <button type="submit">Verify Phone</button>
-      </form>
-      <p class="error-message" id="phoneOtpError"></p>
-    </div>
-  </div>
-
-  <!-- Address Input Modal -->
-  <div id="addressModal" class="modal">
-    <div class="address-modal-content">
-      <span class="close" onclick="closeAddressModal()">&times;</span>
-      <h2 style="text-align: center; font-weight: normal;">Enter Your Address</h2>
-      <form class="address-form" id="addressForm">
-        <input type="text" id="addressName" placeholder="Full Name" required>
-        <textarea id="addressDetails" placeholder="Address (Street, City, State, ZIP)" required rows="4"></textarea>
-        <button type="submit">Submit Address</button>
-      </form>
-      <p class="error-message" id="addressError"></p>
     </div>
   </div>
 
@@ -1256,7 +1276,6 @@
     let currentItemCounterSpan;
     let currentBasePrice;
     let cart = [];
-    let otpPhone = '';
     let userData = {};
 
     function parsePrice(priceStr) {
@@ -1406,6 +1425,10 @@
     }
 
     function openLoginModal() {
+      if (cart.length === 0) {
+        alert('Your cart is empty. Please add some services before proceeding.');
+        return;
+      }
       document.getElementById('loginModal').style.display = 'block';
       document.getElementById('loginError').textContent = '';
     }
@@ -1416,44 +1439,16 @@
       document.getElementById('loginError').textContent = '';
     }
 
-    function openPhoneOtpModal() {
-      document.getElementById('phoneOtpModal').style.display = 'block';
-      document.getElementById('phoneOtpError').textContent = '';
-    }
-
-    function closePhoneOtpModal() {
-      document.getElementById('phoneOtpModal').style.display = 'none';
-      document.getElementById('phoneOtpForm').reset();
-      document.getElementById('phoneOtpError').textContent = '';
-    }
-
-    function openAddressModal() {
-      document.getElementById('addressModal').style.display = 'block';
-      document.getElementById('addressError').textContent = '';
-    }
-
-    function closeAddressModal() {
-      document.getElementById('addressModal').style.display = 'none';
-      document.getElementById('addressForm').reset();
-      document.getElementById('addressError').textContent = '';
-    }
-
     window.onclick = function(event) {
       const modal = document.getElementById('myModal');
       const cartModal = document.getElementById('cartModal');
       const loginModal = document.getElementById('loginModal');
-      const phoneOtpModal = document.getElementById('phoneOtpModal');
-      const addressModal = document.getElementById('addressModal');
       if (event.target == modal) {
         modal.style.display = 'none';
       } else if (event.target == cartModal) {
         cartModal.style.display = 'none';
       } else if (event.target == loginModal) {
         loginModal.style.display = 'none';
-      } else if (event.target == phoneOtpModal) {
-        phoneOtpModal.style.display = 'none';
-      } else if (event.target == addressModal) {
-        addressModal.style.display = 'none';
       }
     }
 
@@ -1472,53 +1467,62 @@
         loginForm.addEventListener('submit', function(e) {
           e.preventDefault();
           const phone = document.getElementById('loginPhone').value;
+          const name = document.getElementById('loginName').value;
+          const address = document.getElementById('loginAddress').value;
 
           if (!/^[0-9]{10}$/.test(phone)) {
             document.getElementById('loginError').textContent = 'Please enter a valid 10-digit phone number.';
             return;
           }
-
-          userData.phone = phone;
-          otpPhone = Math.floor(100000 + Math.random() * 900000).toString();
-          alert(`SMS from One Service: Your OTP is ${otpPhone}. Please enter it to verify your phone number.`);
-          closeLoginModal();
-          openPhoneOtpModal();
-        });
-      }
-
-      const phoneOtpForm = document.querySelector('#phoneOtpForm');
-      if (phoneOtpForm) {
-        phoneOtpForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const enteredOtpPhone = document.getElementById('phoneOtp').value;
-
-          if (enteredOtpPhone === otpPhone) {
-            alert('Login successful! Please enter your address.');
-            closePhoneOtpModal();
-            openAddressModal();
-          } else {
-            document.getElementById('phoneOtpError').textContent = 'Invalid Phone OTP. Please try again.';
-          }
-        });
-      }
-
-      const addressForm = document.querySelector('#addressForm');
-      if (addressForm) {
-        addressForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const name = document.getElementById('addressName').value;
-          const addressDetails = document.getElementById('addressDetails').value;
-
-          if (!name || !addressDetails) {
-            document.getElementById('addressError').textContent = 'Please fill in all fields.';
+          if (!name || !address) {
+            document.getElementById('loginError').textContent = 'Please fill in all fields.';
             return;
           }
 
+          userData.phone = phone;
           userData.name = name;
-          userData.address = addressDetails;
-          alert(`Address saved successfully! Name: ${name}, Address: ${addressDetails}`);
-          closeAddressModal();
-          // Optionally, proceed with order confirmation or redirect
+          userData.address = address;
+
+          // Prepare email data
+          let subTotal = 0;
+          let totalQuantity = 0;
+          const orderDetails = cart.map(item => `${item.title}: Quantity: ${item.quantity}, Price: ₹${(item.basePrice * item.quantity).toFixed(2)}`).join('\n');
+          cart.forEach(item => {
+            subTotal += item.basePrice * item.quantity;
+            totalQuantity += item.quantity;
+          });
+          const visitationFee = 99;
+          const taxes = 9 * totalQuantity;
+          const total = subTotal + visitationFee + taxes;
+
+          // Email parameters
+          const emailParams = {
+            customer_name: name,
+            customer_phone: phone,
+            customer_address: address,
+            order_details: orderDetails,
+            subtotal: subTotal.toFixed(2),
+            visitation_fee: visitationFee.toFixed(2),
+            taxes: taxes.toFixed(2),
+            total: total.toFixed(2)
+          };
+
+          // Log email parameters for debugging
+          console.log('Sending email with parameters:', emailParams);
+
+          // Send email using EmailJS
+          emailjs.send('service_24whk28', 'template_ebglmkj', emailParams)
+            .then((response) => {
+              console.log('Email sent successfully:', response.status, response.text);
+              alert('Order submitted successfully! Details have been sent to team.serviceforall@gmail.com');
+              closeLoginModal();
+              cart = []; // Clear the cart
+              document.querySelectorAll('.counter-box span').forEach(span => span.textContent = '0'); // Reset counters
+              updateCartModal();
+            }, (error) => {
+              console.error('EmailJS error:', error.status, error.text);
+              document.getElementById('loginError').textContent = `Failed to send order details. Error: ${error.text || 'Unknown error'}. Please check the console for details and try again.`;
+            });
         });
       }
     });
