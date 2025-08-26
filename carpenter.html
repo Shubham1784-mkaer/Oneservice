@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -401,6 +362,11 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+    }
+    .login-form input[required]::after {
+      content: '*';
+      color: red;
+      margin-left: 5px;
     }
     .login-form button {
       background-color: orange;
@@ -1243,7 +1209,9 @@
       <form class="login-form" id="loginForm">
         <input type="tel" id="loginPhone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
         <input type="text" id="loginName" placeholder="Full Name" required>
+        <input type="text" id="loginHouseFlatNo" placeholder="House/Flat No." required>
         <textarea id="loginAddress" placeholder="Address (Street, City, State, ZIP)" required rows="4"></textarea>
+        <input type="text" id="loginLandmark" placeholder="Landmark (Optional)">
         <button type="submit">Submit Details</button>
       </form>
       <p class="error-message" id="loginError"></p>
@@ -1468,20 +1436,24 @@
           e.preventDefault();
           const phone = document.getElementById('loginPhone').value;
           const name = document.getElementById('loginName').value;
+          const houseFlatNo = document.getElementById('loginHouseFlatNo').value;
           const address = document.getElementById('loginAddress').value;
+          const landmark = document.getElementById('loginLandmark').value;
 
           if (!/^[0-9]{10}$/.test(phone)) {
             document.getElementById('loginError').textContent = 'Please enter a valid 10-digit phone number.';
             return;
           }
-          if (!name || !address) {
-            document.getElementById('loginError').textContent = 'Please fill in all fields.';
+          if (!name || !houseFlatNo || !address) {
+            document.getElementById('loginError').textContent = 'Please fill in all required fields (Name, House/Flat No., Address).';
             return;
           }
 
           userData.phone = phone;
           userData.name = name;
+          userData.houseFlatNo = houseFlatNo;
           userData.address = address;
+          userData.landmark = landmark;
 
           // Prepare email data
           let subTotal = 0;
@@ -1499,7 +1471,9 @@
           const emailParams = {
             customer_name: name,
             customer_phone: phone,
+            customer_house_flat_no: houseFlatNo,
             customer_address: address,
+            customer_landmark: landmark || 'Not provided',
             order_details: orderDetails,
             subtotal: subTotal.toFixed(2),
             visitation_fee: visitationFee.toFixed(2),
