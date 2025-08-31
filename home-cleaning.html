@@ -37,7 +37,8 @@
         }
         return gk_fileData[filename] || "";
         }
-        </script><!DOCTYPE html>
+</script>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -284,11 +285,11 @@
     }
     .modal-content {
       background-color: #fefefe;
-      margin: 15% auto;
+      margin: 10% auto;
       padding: 20px;
       border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
+      width: 90%;
+      max-width: 800px; /* Increased width */
       border-radius: 10px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
       display: flex;
@@ -373,14 +374,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
-    .login-btn {
+    .login-btn, .clear-cart-btn {
       background-color: orange;
       color: white;
       padding: 10px 18px;
       border-radius: 5px;
       text-decoration: none;
       font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+    .clear-cart-btn {
+      background-color: #dc3545;
+    }
+    .clear-cart-btn:hover {
+      background-color: #c82333;
     }
     .login-modal-content {
       background-color: #fefefe;
@@ -421,6 +431,93 @@
       text-align: center;
       margin-top: 10px;
     }
+    .floating-cart-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: orange;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      position: fixed;
+    }
+    .floating-cart-btn:hover {
+      background-color: #e69500;
+      transform: scale(1.05);
+    }
+    .cart-tooltip {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      right: 0;
+      background-color: #fff;
+      color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      min-width: 200px;
+      max-width: 300px;
+      z-index: 1001;
+      font-size: 14px;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .floating-cart-btn:hover .cart-tooltip {
+      display: block;
+    }
+    .cart-tooltip p {
+      margin: 5px 0;
+      font-size: 13px;
+    }
+    .cart-tooltip:empty::before {
+      content: "Cart is empty";
+      color: #666;
+    }
+    table th, table td {
+      padding: 10px;
+    }
+    table td {
+      border-bottom: 1px solid #eee;
+    }
+    table .counter-box {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+    }
+    table .counter {
+      background-color: transparent;
+      color: black;
+      border: 1px solid #ccc;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: none;
+      transition: all 0.3s ease;
+    }
+    table .counter:hover {
+      background-color: #f0f0f0;
+      transform: scale(1.05);
+    }
+    table .counter-box span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .payment-summary p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -447,13 +544,12 @@
       <a href="#kitchen-cleaning-section" class="service-box"><img src="kitchen-cleaning.png" alt="Kitchen Cleaning"><span>Kitchen Cleaning</span></a>
       <a href="#full-home-cleaning-section" class="service-box"><img src="full-home.png" alt="Full Home/Move-in Cleaning"><span>Full Home/Move-in Cleaning</span></a>
       <a href="#sofa-carpet-cleaning-section" class="service-box"><img src="sofa.png" alt="Sofa & Carpet Cleaning"><span>Sofa & Carpet Cleaning</span></a>
-      <a href="#Cockroach-Ant-General-Pest-Control-section" class="service-box"><img src="hanger.png" alt="Cockroach, Ant & General Pest Control"><span>Cockroach, Ant & General Pest Control</span></a>
+      <a href="#Cockroach-Ant-General-Pest-Control-section" class="service-box"><img src="cockroach.png" alt="Cockroach, Ant & General Pest Control"><span>Cockroach, Ant & General Pest Control</span></a>
       <a href="#termite-control-section" class="service-box"><img src="termite.png" alt="Termite Control"><span>Termite Control</span></a>
       <a href="#bed-bugs-control-section" class="service-box"><img src="bed.png" alt="Bed Bugs Control"><span>Bed Bugs Control</span></a>
     </div>
   </div>
 
-  <!-- Bathroom Cleaning --> 
   <div class="sub-service-section" id="bathroom-cleaning-section">
     <h2>Bathroom Cleaning</h2>
     <div>
@@ -500,6 +596,1178 @@
             <span>0</span>
             <button class="counter" onclick="increment(this)">+</button>
           </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Additional washbasin cleaning</p>
+          <p>₹59</p>
+         <a href="javascript:void(0);" onclick="openModal('Additional washbasin cleaning', '₹59', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+       </div>
+       <div class="img-button-container">
+         <img src="washbasin_cleaning.png" alt="Additional Washbasin Cleaning">
+         <div class="counter-box">
+         <button class="counter" onclick="decrement(this)">-</button>
+         <span>0</span>
+         <button class="counter" onclick="increment(this)">+</button>
+         </div>
+       </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Ceiling fan cleaning</p>
+          <p>₹69</p>
+          <a href="javascript:void(0);" onclick="openModal('Ceiling fan cleaning', '₹69', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="ceiling_fan_cleaning.png" alt="Ceiling Fan Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Door cleaning (upto 1)</p>
+          <p>₹89</p>
+          <a href="javascript:void(0);" onclick="openModal('Door cleaning (upto 1)', '₹89', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="door_cleaning.png" alt="Door Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Balcony cleaning</p>
+          <p>Starts at ₹549</p>
+          <a href="javascript:void(0);" onclick="openModal('Balcony cleaning', 'Starts at ₹549', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="balcony_cleaning.png" alt="Balcony Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Mirror cleaning (upto 1)</p>
+          <p>₹59</p>
+          <a href="javascript:void(0);" onclick="openModal('Mirror cleaning (upto 1)', '₹59', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="mirror_cleaning.png" alt="Mirror Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="kitchen-cleaning-section">
+    <h2>Kitchen Cleaning</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Chimney cleaning</p>
+          <p>₹329</p>
+          <a href="javascript:void(0);" onclick="openModal('Chimney cleaning', '₹329', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="chimney_cleaning.png" alt="Chimney Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Chimney & stove cleaning</p>
+          <p>₹439</p>
+          <a href="javascript:void(0);" onclick="openModal('Chimney & stove cleaning', '₹439', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="chimney_stove_cleaning.png" alt="Chimney and Stove Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Tile & slabs cleaning</p>
+          <p>₹299</p>
+          <a href="javascript:void(0);" onclick="openModal('Tile & slabs cleaning', '₹299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="tile_slabs_cleaning.png" alt="Tile and Slabs Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cabinet cleaning</p>
+          <p>Starts at ₹199</p>
+          <a href="javascript:void(0);" onclick="openModal('Cabinet cleaning', 'Starts at ₹199', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="cabinet_cleaning.png" alt="Cabinet Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Complete kitchen cleaning</p>
+          <p>Starts at ₹799</p>
+          <a href="javascript:void(0);" onclick="openModal('Complete kitchen cleaning', 'Starts at ₹799', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="complete_kitchen_cleaning.png" alt="Complete Kitchen Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Fridge cleaning</p>
+          <p>Starts at ₹389</p>
+          <a href="javascript:void(0);" onclick="openModal('Fridge cleaning', 'Starts at ₹389', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="fridge_cleaning.png" alt="Fridge Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Air fryer cleaning</p>
+          <p>₹199</p>
+          <a href="javascript:void(0);" onclick="openModal('Air fryer cleaning', '₹199', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="air_fryer_cleaning.png" alt="Air Fryer Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Gas stove cleaning</p>
+          <p>Starts at ₹99</p>
+          <a href="javascript:void(0);" onclick="openModal('Gas stove cleaning', 'Starts at ₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="gas_stove_cleaning.png" alt="Gas Stove Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>OTG cleaning</p>
+          <p>₹399</p>
+          <a href="javascript:void(0);" onclick="openModal('OTG cleaning', '₹399', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="otg_cleaning.png" alt="OTG Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Sandwich Maker/Griller cleaning</p>
+          <p>₹99</p>
+          <a href="javascript:void(0);" onclick="openModal('Sandwich Maker/Griller cleaning', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="sandwich_maker_cleaning.png" alt="Sandwich Maker/Griller Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Microwave cleaning</p>
+          <p>₹189</p>
+          <a href="javascript:void(0);" onclick="openModal('Microwave cleaning', '₹189', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="microwave_cleaning.png" alt="Microwave Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Appliance cleaning package</p>
+          <p>Starts at ₹896</p>
+          <a href="javascript:void(0);" onclick="openModal('Appliance cleaning package', 'Starts at ₹896', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="appliance_cleaning_package.png" alt="Appliance Cleaning Package">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Sink & under the sink</p>
+          <p>₹99</p>
+          <a href="javascript:void(0);" onclick="openModal('Sink & under the sink', '₹99', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="sink_under_cleaning.png" alt="Sink and Under the Sink Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Kitchen Window cleaning</p>
+          <p>₹299</p>
+          <a href="javascript:void(0);" onclick="openModal('Kitchen Window cleaning', '₹299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="kitchen_window_cleaning.png" alt="Kitchen Window Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="full-home-cleaning-section">
+    <h2>Full Home/Move-in Cleaning</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Furnished apartment</p>
+          <p>Starts at ₹3,299</p>
+          <a href="javascript:void(0);" onclick="openModal('Furnished apartment', 'Starts at ₹3,299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="furnished_apartment_cleaning.png" alt="Furnished Apartment Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Unfurnished apartment</p>
+          <p>Starts at ₹3,099</p>
+          <a href="javascript:void(0);" onclick="openModal('Unfurnished apartment', 'Starts at ₹3,099', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="unfurnished_apartment_cleaning.png" alt="Unfurnished Apartment Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Furnished bungalow</p>
+          <p>Starts at ₹4,299</p>
+          <a href="javascript:void(0);" onclick="openModal('Furnished bungalow', 'Starts at ₹4,299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="furnished_bungalow_cleaning.png" alt="Furnished Bungalow Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Unfurnished bungalow</p>
+          <p>Starts at ₹3,899</p>
+          <a href="javascript:void(0);" onclick="openModal('Unfurnished bungalow', 'Starts at ₹3,899', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="unfurnished_bungalow_cleaning.png" alt="Unfurnished Bungalow Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Bedroom cleaning</p>
+          <p>Starts at ₹799</p>
+          <a href="javascript:void(0);" onclick="openModal('Bedroom cleaning', 'Starts at ₹799', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bedroom_cleaning.png" alt="Bedroom Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Living room cleaning</p>
+          <p>Starts at ₹889</p>
+          <a href="javascript:void(0);" onclick="openModal('Living room cleaning', 'Starts at ₹889', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="living_room_cleaning.png" alt="Living Room Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Utensil removal & placement</p>
+          <p>₹389</p>
+          <a href="javascript:void(0);" onclick="openModal('Utensil removal & placement', '₹389', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="utensil_removal_placement.png" alt="Utensil Removal and Placement">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Cabinet cleaning (upto 2)</p>
+          <p>₹289</p>
+          <a href="javascript:void(0);" onclick="openModal('Cabinet cleaning (upto 2)', '₹289', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="cabinet_cleaning_two.png" alt="Cabinet Cleaning (Upto 2)">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="sofa-carpet-cleaning-section">
+    <h2>Sofa & Carpet Cleaning</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Sofa Cleaning</p>
+          <p>Starts at ₹559</p>
+          <a href="javascript:void(0);" onclick="openModal('Sofa Cleaning', 'Starts at ₹559', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="sofa_cleaning.png" alt="Sofa Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Carpet cleaning</p>
+          <p>Starts at ₹389</p>
+          <a href="javascript:void(0);" onclick="openModal('Carpet cleaning', 'Starts at ₹389', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="carpet_cleaning.png" alt="Carpet Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Dining table & chairs cleaning</p>
+          <p>Starts at ₹289</p>
+          <a href="javascript:void(0);" onclick="openModal('Dining table & chairs cleaning', 'Starts at ₹289', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="dining_table_chairs_cleaning.png" alt="Dining Table and Chairs Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Mattress cleaning</p>
+          <p>Starts at ₹448</p>
+          <a href="javascript:void(0);" onclick="openModal('Mattress cleaning', 'Starts at ₹448', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="mattress_cleaning.png" alt="Mattress Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Bedroom cleaning</p>
+          <p>Starts at ₹789</p>
+          <a href="javascript:void(0);" onclick="openModal('Bedroom cleaning', 'Starts at ₹789', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bedroom_cleaning.png" alt="Bedroom Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Living room cleaning</p>
+          <p>Starts at ₹879</p>
+          <a href="javascript:void(0);" onclick="openModal('Living room cleaning', 'Starts at ₹879', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="living_room_cleaning.png" alt="Living Room Cleaning">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="Cockroach-Ant-General-Pest-Control-section">
+    <h2>Cockroach, Ant & General Pest Control</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Pest control (Include utensils removal)</p>
+          <p>Starts at ₹1,076</p>
+          <a href="javascript:void(0);" onclick="openModal('Pest control (Include utensils removal)', 'Starts at ₹1,076', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="pest_control_utensils.png" alt="Pest Control with Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Pest control (excludes utensils removal)</p>
+          <p>Starts at ₹879</p>
+          <a href="javascript:void(0);" onclick="openModal('Pest control (excludes utensils removal)', 'Starts at ₹879', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="pest_control_no_utensils.png" alt="Pest Control without Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Apartment pest control (include utensils removal)</p>
+          <p>Starts at ₹1,398</p>
+          <a href="javascript:void(0);" onclick="openModal('Apartment pest control (include utensils removal)', 'Starts at ₹1,398', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="apartment_pest_control_utensils.png" alt="Apartment Pest Control with Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Apartment pest control (excludes utensils removal)</p>
+          <p>Starts at ₹1,199</p>
+          <a href="javascript:void(0);" onclick="openModal('Apartment pest control (excludes utensils removal)', 'Starts at ₹1,199', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="apartment_pest_control_no_utensils.png" alt="Apartment Pest Control without Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Bungalow pest control (include utensils removal)</p>
+          <p>Starts at ₹1,898</p>
+          <a href="javascript:void(0);" onclick="openModal('Bungalow pest control (include utensils removal)', 'Starts at ₹1,898', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bungalow_pest_control_utensils.png" alt="Bungalow Pest Control with Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Bungalow pest control (excludes utensils removal)</p>
+          <p>Starts at ₹1,698</p>
+          <a href="javascript:void(0);" onclick="openModal('Bungalow pest control (excludes utensils removal)', 'Starts at ₹1,698', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bungalow_pest_control_no_utensils.png" alt="Bungalow Pest Control without Utensils Removal">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Office pest control</p>
+          <p>Starts at ₹1,549</p>
+          <a href="javascript:void(0);" onclick="openModal('Office pest control', 'Starts at ₹1,549', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="office_pest_control.png" alt="Office Pest Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Retail shop pest control</p>
+          <p>Starts at ₹1,549</p>
+          <a href="javascript:void(0);" onclick="openModal('Retail shop pest control', 'Starts at ₹1,549', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="retail_pest_control.png" alt="Retail Shop Pest Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="termite-control-section">
+    <h2>Termite Control</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>Apartment termite control</p>
+          <p>Starts at ₹3,899</p>
+          <a href="javascript:void(0);" onclick="openModal('Apartment termite control', 'Starts at ₹3,899', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="apartment_termite_control.png" alt="Apartment Termite Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>Bungalow termite control</p>
+          <p>Starts at ₹8,299</p>
+          <a href="javascript:void(0);" onclick="openModal('Bungalow termite control', 'Starts at ₹8,299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bungalow_termite_control.png" alt="Bungalow Termite Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-service-section" id="bed-bugs-control-section">
+    <h2>Bed Bugs Control</h2>
+    <div>
+      <div class="sub-service-item">
+        <div>
+          <p>1 BHK</p>
+          <p>₹1,499</p>
+          <a href="javascript:void(0);" onclick="openModal('1 BHK', '₹1,499', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bed_bugs_1bhk.png" alt="1 BHK Bed Bugs Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>2 BHK</p>
+          <p>₹1,799</p>
+          <a href="javascript:void(0);" onclick="openModal('2 BHK', '₹1,799', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bed_bugs_2bhk.png" alt="2 BHK Bed Bugs Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sub-service-item">
+        <div>
+          <p>3 BHK</p>
+          <p>₹2,299</p>
+          <a href="javascript:void(0);" onclick="openModal('3 BHK', '₹2,299', this.closest('.sub-service-item').querySelector('.counter-box span'))">View details</a>
+        </div>
+        <div class="img-button-container">
+          <img src="bed_bugs_3bhk.png" alt="3 BHK Bed Bugs Control">
+          <div class="counter-box">
+            <button class="counter" onclick="decrement(this)">-</button>
+            <span>0</span>
+            <button class="counter" onclick="increment(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="javascript:void(0);" onclick="openCartModal()" class="floating-cart-btn" id="floatingCartBtn">
+    Add to Cart
+    <div class="cart-tooltip" id="cartTooltip"></div>
+  </a>
+
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-header">
+        <p id="modal-title"></p>
+        <div id="modal-add-container">
+          <button id="modal-add-btn" class="add-btn">Add</button>
+          <div id="modal-counter-box" class="counter-box">
+            <button class="counter" onclick="modalDecrement()">-</button>
+            <span id="modal-counter">0</span>
+            <button class="counter" onclick="modalIncrement()">+</button>
+          </div>
+        </div>
+      </div>
+      <p id="modal-price" class="price"></p>
+      <hr>
+      <p class="process-heading">Our Process</p>
+      <ol>
+        <li>Inspection & quote<p>We inspect your item & share a repair quote for approval.</p></li>
+        <li>Quote approval<p>You can approve the quote to proceed, or pay a visitation charge of rupees 99 if declined.</p></li>
+        <li>Repair & spare parts<p>If needed, we will source spare parts from local markets.</p></li>
+        <li>Replacement, if needed<p>If repair is not possible, we will replace the item.</p></li>
+        <li>Warranty activation<p>The service is covered by a 30-day warranty for any issues after repair.</p></li>
+      </ol>
+      <hr>
+      <p class="general-info-heading">General Information</p>
+      <ol>
+        <li>The service is covered by a 30-day warranty for any issues after repair/replacement.<p>We will fix it for free.</p></li>
+        <li>The cost do not include spare parts.<p>The amount you pay at booking is a visitation fee which will be adjusted in your final replacement quote.</p></li>
+        <li>One Service does not offer warranty on spare parts purchased from local market or provided by the customer.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCartModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Your Cart</h2>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+          <tr style="border-bottom: 1px solid #ccc;">
+            <th style="text-align: left; padding: 10px;">Name of Service</th>
+            <th style="text-align: center; padding: 10px;">Quantity</th>
+            <th style="text-align: right; padding: 10px;">Price</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+      </table>
+      <hr>
+      <div class="payment-summary" style="text-align: left; font-size: 16px;">
+        <p id="cart-subtotal" style="font-size: 18px;">Subtotal: ₹0.00</p>
+        <p id="cart-taxes-fee" style="font-size: 18px;">Taxes & Fee: ₹0.00</p>
+        <p id="cart-total" style="font-size: 18px; font-weight: bold;">Total Amount: ₹0.00</p>
+      </div>
+      <div class="total-section" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+        <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+        <a href="javascript:void(0);" onclick="openLoginModal()" class="login-btn">Login</a>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="loginModal" class="modal">
+    <div class="login-modal-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      <h2 style="text-align: center; font-weight: normal;">Enter Your Details</h2>
+      <form class="login-form" id="loginForm">
+        <input type="tel" id="loginPhone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+        <input type="text" id="loginName" placeholder="Full Name" required>
+        <input type="text" id="loginHouseFlatNo" placeholder="House/Flat No." required>
+        <textarea id="loginAddress" placeholder="Address (Street, City, State, ZIP)" required rows="4"></textarea>
+        <input type="text" id="loginLandmark" placeholder="Landmark (Optional)">
+        <button type="submit">Submit Details</button>
+      </form>
+      <p class="error-message" id="loginError"></p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-top">
+      <img src="SERVICE FOR ALL_20250713_140610_0000.png" alt="Footer Logo" class="footer-logo">
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#products">Products</a>
+        <a href="#services">Services</a>
+        <a href="#privacy">Privacy Policy</a>
+      </div>
+      <div class="footer-socials">
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+      </div>
+      <a href="#contact" class="get-in-touch">Get in Touch</a>
+    </div>
+    <div class="copyright">
+      Copyright @ One Service
+    </div>
+  </div>
+
+  <script>
+    let currentItemCounterSpan;
+    let currentBasePrice;
+    let originalPriceString;
+    let cart = [];
+    let userData = {};
+
+    function parsePrice(priceStr) {
+      // Handle both "Starts at" and fixed prices (e.g., ₹1,499)
+      const cleanedPrice = priceStr.replace(/Starts at /, '').replace(/₹/, '').replace(/,/g, '');
+      return parseFloat(cleanedPrice) || 0;
+    }
+
+    function updateModalPrice(quantity) {
+      const modalPriceElement = document.getElementById('modal-price');
+      if (quantity === 0) {
+        modalPriceElement.textContent = originalPriceString; // Show original price string
+      } else {
+        if (currentBasePrice !== undefined) {
+          const totalPrice = currentBasePrice * quantity;
+          // Format with commas for Indian numbering system
+          modalPriceElement.textContent = `₹${totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        }
+      }
+    }
+    
+    function updateFloatingCartButton() {
+      const floatingCartBtn = document.getElementById('floatingCartBtn');
+      const cartTooltip = document.getElementById('cartTooltip');
+      floatingCartBtn.style.display = cart.length > 0 ? 'block' : 'none';
+      cartTooltip.innerHTML = '';
+      if (cart.length > 0) {
+        cart.forEach(item => {
+          const itemElement = document.createElement('p');
+          itemElement.textContent = `${item.title}: ₹${(item.basePrice * item.quantity).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+          cartTooltip.appendChild(itemElement);
+        });
+      }
+    }
+
+
+    /* Replace the existing updateCartModal function */
+    function updateCartModal() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+      let subTotal = 0;
+      cart.forEach((item, index) => {
+        const itemElement = document.createElement('tr');
+        itemElement.innerHTML = `
+          <td>${item.title}</td>
+          <td>
+            <div class="counter-box">
+              <button class="counter" onclick="decrementCartItem(${index})">-</button>
+              <span>${item.quantity}</span>
+              <button class="counter" onclick="incrementCartItem(${index})">+</button>
+            </div>
+          </td>
+          <td style="text-align: right;">₹${(item.basePrice * item.quantity).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p></td>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+        subTotal += item.basePrice * item.quantity;
+      });
+      const taxesAndFee = subTotal * 0.12 + 99; // 12% taxes + visitation fee
+      const total = subTotal + taxesAndFee;
+
+      document.getElementById('cart-subtotal').textContent = `Subtotal: ₹${subTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      document.getElementById('cart-taxes-fee').textContent = `Taxes & Fee: ₹${taxesAndFee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      document.getElementById('cart-total').textContent = `Total Amount: ₹${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      updateFloatingCartButton();
+    }
+    
+    /* Add these new functions */
+    function incrementCartItem(index) {
+      cart[index].quantity += 1;
+      const subServiceItem = Array.from(document.querySelectorAll('.sub-service-item')).find(
+        item => item.querySelector('p:first-child').textContent === cart[index].title
+      );
+      if (subServiceItem) {
+        const span = subServiceItem.querySelector('.counter-box span');
+        span.textContent = cart[index].quantity;
+      }
+      updateCartModal();
+    }
+
+    function decrementCartItem(index) {
+      if (cart[index].quantity > 0) {
+        cart[index].quantity -= 1;
+        const subServiceItem = Array.from(document.querySelectorAll('.sub-service-item')).find(
+          item => item.querySelector('p:first-child').textContent === cart[index].title
+        );
+        if (subServiceItem) {
+          const span = subServiceItem.querySelector('.counter-box span');
+          span.textContent = cart[index].quantity;
+        }
+        if (cart[index].quantity === 0) {
+          cart.splice(index, 1);
+        }
+        updateCartModal();
+        if (document.getElementById('myModal').style.display === 'block' && currentItemCounterSpan) {
+          const modalTitle = document.getElementById('modal-title').textContent;
+          if (modalTitle === cart[index]?.title || (cart.length === 0 && modalTitle === subServiceItem?.querySelector('p:first-child').textContent)) {
+            document.getElementById('modal-counter').textContent = '0';
+            document.getElementById('modal-counter-box').style.display = 'none';
+            document.getElementById('modal-add-btn').style.display = 'block';
+            updateModalPrice(0);
+          }
+        }
+      }
+    }
+
+
+    function clearCart() {
+      cart = []; // Clear the cart array
+      document.querySelectorAll('.counter-box span').forEach(span => span.textContent = '0'); // Reset all counters
+      updateCartModal(); // Update the cart modal
+      // Reset modal counter and price if modal is open
+      if (document.getElementById('myModal').style.display === 'block') {
+        document.getElementById('modal-counter').textContent = '0';
+        document.getElementById('modal-counter-box').style.display = 'none';
+        document.getElementById('modal-add-btn').style.display = 'block';
+        updateModalPrice(0);
+      }
+      updateFloatingCartButton();
+    }
+
+    function updateCart(title, basePrice, quantity) {
+      const existingItemIndex = cart.findIndex(item => item.title === title);
+      if (existingItemIndex > -1) {
+        if (quantity > 0) {
+          cart[existingItemIndex].quantity = quantity;
+        } else {
+          cart.splice(existingItemIndex, 1);
+        }
+      } else if (quantity > 0) {
+        cart.push({ title, basePrice, quantity });
+      }
+      updateCartModal();
+      updateFloatingCartButton();
+    }
+
+    function increment(btn) {
+      const span = btn.parentElement.querySelector('span');
+      const newValue = parseInt(span.textContent) + 1;
+      span.textContent = newValue;
+      // If modal is open for this item, sync modal counter and price
+      if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
+        document.getElementById('modal-counter').textContent = newValue;
+        updateModalPrice(newValue);
+      }
+      const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
+      const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
+      const basePrice = parsePrice(priceStr);
+      updateCart(title, basePrice, newValue);
+    }
+
+    function decrement(btn) {
+      const span = btn.parentElement.querySelector('span');
+      const value = parseInt(span.textContent);
+      if (value > 0) {
+        const newValue = value - 1;
+        span.textContent = newValue;
+        // If modal is open for this item, sync modal counter and price
+        if (currentItemCounterSpan === span && document.getElementById('myModal').style.display === 'block') {
+          document.getElementById('modal-counter').textContent = newValue;
+          updateModalPrice(newValue);
+          if (newValue <= 0) {
+            document.getElementById('modal-counter-box').style.display = 'none';
+            document.getElementById('modal-add-btn').style.display = 'block';
+          }
+        }
+        const title = btn.closest('.sub-service-item').querySelector('p:first-child').textContent;
+        const priceStr = btn.closest('.sub-service-item').querySelector('p:nth-child(2)').textContent;
+        const basePrice = parsePrice(priceStr);
+        updateCart(title, basePrice, newValue);
+      }
+    }
+
+    function modalIncrement() {
+      const span = document.getElementById('modal-counter');
+      const newValue = parseInt(span.textContent) + 1;
+      span.textContent = newValue;
+      currentItemCounterSpan.textContent = newValue; // Sync main counter
+      updateModalPrice(newValue);
+      updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
+    }
+
+    function modalDecrement() {
+      const span = document.getElementById('modal-counter');
+      let value = parseInt(span.textContent);
+      if (value > 0) {
+        const newValue = value - 1;
+        span.textContent = newValue;
+        currentItemCounterSpan.textContent = newValue; // Sync main counter
+        updateModalPrice(newValue);
+        if (newValue <= 0) {
+          document.getElementById('modal-counter-box').style.display = 'none';
+          document.getElementById('modal-add-btn').style.display = 'block';
+        }
+        updateCart(document.getElementById('modal-title').textContent, currentBasePrice, newValue);
+      }
+    }
+
+    function openModal(title, price, itemCounterSpan) {
+      document.getElementById('modal-title').textContent = title;
+      originalPriceString = price; // Store original price string (e.g., ₹1,499)
+      currentBasePrice = parsePrice(price); // Parse numerical value (e.g., 1499)
+      currentItemCounterSpan = itemCounterSpan; // Link to main counter
+      const quantity = parseInt(itemCounterSpan.textContent) || 0;
+      const modalCounter = document.getElementById('modal-counter');
+      modalCounter.textContent = quantity; // Sync modal counter
+      updateModalPrice(quantity); // Update modal price
+      // Show/hide Add button and counter box
+      document.getElementById('modal-add-btn').style.display = quantity > 0 ? 'none' : 'block';
+      document.getElementById('modal-counter-box').style.display = quantity > 0 ? 'flex' : 'none';
+      document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+    }
+
+    function openCartModal() {
+      updateCartModal();
+      document.getElementById('cartModal').style.display = 'block';
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function openLoginModal() {
+      if (cart.length === 0) {
+        alert('Your cart is empty. Please add some services before proceeding.');
+        return;
+      }
+      document.getElementById('loginModal').style.display = 'block';
+      document.getElementById('loginError').textContent = '';
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').textContent = '';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('myModal');
+      const cartModal = document.getElementById('cartModal');
+      const loginModal = document.getElementById('loginModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      } else if (event.target == cartModal) {
+        cartModal.style.display = 'none';
+      } else if (event.target == loginModal) {
+        loginModal.style.display = 'none';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('modal-add-btn').addEventListener('click', function() {
+        document.getElementById('modal-counter').textContent = 1;
+        this.style.display = 'none';
+        document.getElementById('modal-counter-box').style.display = 'flex';
+        currentItemCounterSpan.textContent = 1;
+        updateModalPrice(1);
+        updateCart(document.getElementById('modal-title').textContent, currentBasePrice, 1);
+      });
+
+      const loginForm = document.querySelector('#loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const phone = document.getElementById('loginPhone').value;
+          const name = document.getElementById('loginName').value;
+          const houseFlatNo = document.getElementById('loginHouseFlatNo').value;
+          const address = document.getElementById('loginAddress').value;
+          const landmark = document.getElementById('loginLandmark').value;
+
+          if (!/^[0-9]{10}$/.test(phone)) {
+            document.getElementById('loginError').textContent = 'Please enter a valid 10-digit phone number.';
+            return;
+          }
+          if (!name || !houseFlatNo || !address) {
+            document.getElementById('loginError').textContent = 'Please fill in all required fields (Name, House/Flat No., Address).';
+            return;
+          }
+
+          userData.phone = phone;
+          userData.name = name;
+          userData.houseFlatNo = houseFlatNo;
+          userData.address = address;
+          userData.landmark = landmark;
+
+          // Prepare email data
+          let subTotal = 0;
+          let totalQuantity = 0;
+          const orderDetails = cart.map(item => `${item.title}: Quantity: ${item.quantity}, Price: ₹${(item.basePrice * item.quantity).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`).join('\n');
+          cart.forEach(item => {
+            subTotal += item.basePrice * item.quantity;
+            totalQuantity += item.quantity;
+          });
+          const taxesAndFee = subTotal * 0.12 + 99; // 12% taxes + visitation fee
+          const total = subTotal + taxesAndFee;
+
+          // Email parameters
+          const emailParams = {
+            customer_name: name,
+            customer_phone: phone,
+            customer_house_flat_no: houseFlatNo,
+            customer_address: address,
+            customer_landmark: landmark || 'Not provided',
+            order_details: orderDetails,
+            subtotal: subTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            visitation_fee: 99,
+            taxes: (subTotal * 0.12).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            total: total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          };
+
+          // Send email using EmailJS
+          emailjs.send('service_24whk28', 'template_eb', emailParams)
+            .then(function(response) {
+              console.log('SUCCESS!', response.status, response.text);
+              alert('Order submitted successfully! You will receive a confirmation soon.');
+              closeLoginModal();
+              clearCart(); // Clear cart after successful submission
+            }, function(error) {
+              console.log('FAILED...', error);
+              document.getElementById('loginError').textContent = 'Failed to submit order. Please try again.';
+            });
+        });
+      }
+    });
+  </script>
+</body>
+</html>          </div>
         </div>
       </div>
       <div class="sub-service-item">
